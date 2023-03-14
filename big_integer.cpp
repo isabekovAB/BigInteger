@@ -56,9 +56,7 @@ bool operator==(const BigInt& left, const BigInt& right) {
           left.is_null_ == right.is_null_ && left.number_ == right.number_);
 }
 
-bool operator!=(const BigInt& left, const BigInt& right) {
-  return !(left == right);
-}
+bool operator!=(const BigInt& left, const BigInt& right) { return !(left == right); }
 
 bool BigInt::operator>(const BigInt& other) const {
   if (is_negative_ != other.is_negative_) {
@@ -77,17 +75,9 @@ bool BigInt::operator>(const BigInt& other) const {
   return number_[0] > other.number_[0] && !is_negative_;
 }
 
-bool BigInt::operator<(const BigInt& other) const {
-  return !(*this > other) && *this != other;
-}
-
-bool BigInt::operator>=(const BigInt& other) const {
-  return *this == other || *this > other;
-}
-
-bool BigInt::operator<=(const BigInt& other) const {
-  return *this < other || *this == other;
-}
+bool BigInt::operator<(const BigInt& other) const { return !(*this > other) && *this != other; }
+bool BigInt::operator>=(const BigInt& other) const { return *this == other || *this > other; }
+bool BigInt::operator<=(const BigInt& other) const { return *this < other || *this == other; }
 
 BigInt& BigInt::operator=(const BigInt& other) {
   number_ = other.number_;
@@ -256,6 +246,7 @@ BigInt& BigInt::GeneralDiv(const BigInt& other) {
   int64_t work_size = number_.size() - 1;
   BigInt other_copy = other;
   other_copy.is_negative_ = false;
+  
   while (work_size >= 0) {
     big_zero *= kBase;
     big_zero += BigInt(number_[work_size--]);
@@ -268,6 +259,7 @@ BigInt& BigInt::GeneralDiv(const BigInt& other) {
     result += ind;
     big_zero -= (other_copy * ind);
   }
+  
   number_ = result.number_;
   DeleteZeros();
   return *this;
@@ -321,14 +313,17 @@ BigInt& BigInt::DiffSignPlus(const BigInt& num) {
     BigInt second = num;
     first.is_negative_ = false;
     second.is_negative_ = false;
+    
     if (first < second) {
       std::swap(first.number_, second.number_);
       std::swap(first.is_null_, second.is_null_);
       is_negative_ = num.is_negative_;
     }
+    
     size_t s_size = second.number_.size();
     int64_t ind = 0;
     number_.resize(s_size, 0);
+    
     for (size_t i = 0; i < first.number_.size(); ++i) {
       if (i < s_size) {
         first.number_[i] -= second.number_[i] + ind;
